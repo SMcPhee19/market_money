@@ -34,6 +34,21 @@ module Api
           render(json: VendorSerializer.new(Vendor.find(params[:id])))
         end
       end
+
+      def new; end
+
+      def create
+        vendor = Vendor.new(vendor_params)
+        return unless vendor.save
+
+        render(json: VendorSerializer.new(vendor), status: :created)
+      end
+
+      private
+
+      def vendor_params
+        params.require(:vendor).permit(:name, :description, :contact_name, :contact_phone, :credit_accepted)
+      end
     end
   end
 end
