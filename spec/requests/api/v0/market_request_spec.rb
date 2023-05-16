@@ -66,14 +66,14 @@ describe '/api/v0/markets' do
   describe 'sends a single market' do
     it 'happy path' do
       market1 = create(:market,
-                      name: 'Union Station Farmers Market',
-                      street: '1701 Wynkoop St',
-                      city: 'Denver',
-                      county: 'Denver',
-                      state: 'Colorado',
-                      zip: '80202',
-                      lat: '39.752723',
-                      lon: '-104.998275')
+                       name: 'Union Station Farmers Market',
+                       street: '1701 Wynkoop St',
+                       city: 'Denver',
+                       county: 'Denver',
+                       state: 'Colorado',
+                       zip: '80202',
+                       lat: '39.752723',
+                       lon: '-104.998275')
       vendors = create_list(:vendor, 1)
 
       create(:market_vendor, market_id: market1.id, vendor_id: vendors[0].id)
@@ -101,7 +101,7 @@ describe '/api/v0/markets' do
       get '/api/v0/markets/1223123123123123123'
 
       market = JSON.parse(response.body, symbolize_names: true)
-      
+
       expect(response).to_not be_successful
       expect(response.status).to eq(404)
       expect(market[:errors][0][:detail]).to eq("Couldn't find Market with 'id'=1223123123123123123")
