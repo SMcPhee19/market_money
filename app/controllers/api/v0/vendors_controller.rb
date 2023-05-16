@@ -14,4 +14,8 @@ class Api::V0::VendorsController < ApplicationController
       render(json: VendorSerializer.new(market.vendors))
     end
   end
+
+  def show
+    render(json: VendorSerializer.new(Vendor.find(params[:id])))
+  end
 end

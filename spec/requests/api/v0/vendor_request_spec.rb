@@ -59,3 +59,33 @@ describe '/api/v0/vendors' do
     expect(market[:errors][0][:detail]).to eq("Couldn't find Market with 'id'=1223123123123123123")
   end
 end
+
+describe 'api/v0/vendors/:id' do
+  it 'sends a single vendor, happy' do
+    market1 = create(:market)
+    vendor1 = create(:vendor,
+    name: 'Urban Harvest',
+    description: 'Urban Harvest is a non-profit organization',
+    contact_name: 'Bob',
+    contact_phone: '303-555-5555',
+    credit_accepted: true
+    )
+
+    create(:market_vendor, market_id: market1.id, vendor_id: vendor1.id)
+
+    get "/api/v0/vendors/#{vendor1.id}"
+
+    expect(response).to be_successful
+
+    vendor = JSON.parse(response.body, symbolize_names: true)
+
+    expect(vendor.count).to eq(1)
+    expect(vendor[:data][:id]).to eq(vendor1.id.to_s)
+    expect(vendor[:data][:type]).to eq('vendor')
+    expect(vendor[:data][:attributes][:name]).to eq('Urban Harvest')
+    expect(vendor[:data][:attributes][:description]).to eq('Urban Harvest is a non-profit organization')
+    expect(vendor[:data][:attributes][:contact_name]).to eq('Bob')
+    expect(vendor[:data][:attributes][:contact_phone]).to eq('303-555-5555')
+    expect(vendor[:data][:attributes][:credit_accepted]).to eq(true)
+  end
+end
