@@ -101,14 +101,14 @@ end
 describe 'Creates a new vendor' do
   it 'happy path' do
     valid_attributes = {
-        vendor: {
-          name: 'Kakariko Village Bazaar',
-          description: "It's dangerous to go alone! Take this.",
-          contact_name: 'Rhoam Bosphoramus Hyrule',
-          contact_phone: '322-498-4456',
-          credit_accepted: true
-        }
+      vendor: {
+        name: 'Kakariko Village Bazaar',
+        description: "It's dangerous to go alone! Take this.",
+        contact_name: 'Rhoam Bosphoramus Hyrule',
+        contact_phone: '322-498-4456',
+        credit_accepted: true
       }
+    }
 
     post '/api/v0/vendors', params: valid_attributes
 
@@ -124,16 +124,16 @@ describe 'Creates a new vendor' do
     expect(new_vendor[:data][:type]).to eq('vendor')
     expect(new_vendor[:data][:attributes]).to have_key(:name)
     expect(new_vendor[:data][:attributes][:name]).to be_a(String)
-    expect(new_vendor[:data][:attributes][:name]).to eq("Kakariko Village Bazaar")
+    expect(new_vendor[:data][:attributes][:name]).to eq('Kakariko Village Bazaar')
     expect(new_vendor[:data][:attributes]).to have_key(:description)
     expect(new_vendor[:data][:attributes][:description]).to be_a(String)
     expect(new_vendor[:data][:attributes][:description]).to eq("It's dangerous to go alone! Take this.")
     expect(new_vendor[:data][:attributes]).to have_key(:contact_name)
     expect(new_vendor[:data][:attributes][:contact_name]).to be_a(String)
-    expect(new_vendor[:data][:attributes][:contact_name]).to eq("Rhoam Bosphoramus Hyrule")
+    expect(new_vendor[:data][:attributes][:contact_name]).to eq('Rhoam Bosphoramus Hyrule')
     expect(new_vendor[:data][:attributes]).to have_key(:contact_phone)
     expect(new_vendor[:data][:attributes][:contact_phone]).to be_a(String)
-    expect(new_vendor[:data][:attributes][:contact_phone]).to eq("322-498-4456")
+    expect(new_vendor[:data][:attributes][:contact_phone]).to eq('322-498-4456')
     expect(new_vendor[:data][:attributes]).to have_key(:credit_accepted)
     expect(new_vendor[:data][:attributes][:credit_accepted]).to be_in([true, false])
     expect(new_vendor[:data][:attributes][:credit_accepted]).to eq(true)

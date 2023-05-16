@@ -8,9 +8,10 @@ class Vendor < ApplicationRecord
   validate :credit_accepted_presence
 
   private
+
   def credit_accepted_presence
-    unless credit_accepted == true || credit_accepted == false
-      errors.add(:credit_accepted, 'must be provided') 
-    end
+    return if credit_accepted == true || credit_accepted == false
+
+    errors.add(:credit_accepted, 'must be provided')
   end
 end

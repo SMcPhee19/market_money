@@ -35,15 +35,13 @@ module Api
         end
       end
 
-      def new
-        
-      end
+      def new; end
 
       def create
         vendor = Vendor.new(vendor_params)
-        if vendor.save
-          render(json: VendorSerializer.new(vendor), status: :created)
-        end
+        return unless vendor.save
+
+        render(json: VendorSerializer.new(vendor), status: :created)
       end
 
       private
