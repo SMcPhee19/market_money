@@ -43,13 +43,13 @@ module Api
           render(json: VendorSerializer.new(Vendor.create(vendor_params)), status: 201)
         else
           render json: {
-            "errors": [
-              {
-                "detail": "Param is missing or the value is empty: vendor"
-              }
-            ]
-          },
-          status: 400
+                   "errors": [
+                     {
+                       "detail": 'Param is missing or the value is empty: vendor'
+                     }
+                   ]
+                 },
+                 status: 400
         end
       end
 

@@ -141,17 +141,17 @@ describe 'Creates a new vendor' do
 
   it 'sad path' do
     invalid_attributes = {
-    name: 'Kakariko Village Bazaar'
+      name: 'Kakariko Village Bazaar'
     }
 
-    headers = { 'CONTENT_TYPE' => 'application/json'}
+    headers = { 'CONTENT_TYPE' => 'application/json' }
 
-    post '/api/v0/vendors', headers: headers, params: JSON.generate(vendor: invalid_attributes)
+    post '/api/v0/vendors', headers:, params: JSON.generate(vendor: invalid_attributes)
 
     vendor = JSON.parse(response.body, symbolize_names: true)
 
     expect(response).to_not be_successful
     expect(response.status).to eq(400)
-    expect(vendor[:errors][0][:detail]).to eq("Param is missing or the value is empty: vendor")
+    expect(vendor[:errors][0][:detail]).to eq('Param is missing or the value is empty: vendor')
   end
 end
