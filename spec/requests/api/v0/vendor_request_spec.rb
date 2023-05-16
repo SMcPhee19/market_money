@@ -48,4 +48,14 @@ describe '/api/v0/vendors' do
       expect(vendor[:attributes][:credit_accepted]).to be_in([true, false])
     end
   end
+
+  it 'sad path' do
+    get '/api/v0/markets/1223123123123123123'
+
+    market = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to_not be_successful
+    expect(response.status).to eq(404)
+    expect(market[:errors][0][:detail]).to eq("Couldn't find Market with 'id'=1223123123123123123")
+  end
 end
