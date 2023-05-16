@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # spec/requests/api/v0/vendor_request_spec.rb
 require 'rails_helper'
 
@@ -19,7 +21,6 @@ describe '/api/v0/vendors' do
     create(:market_vendor, market_id: market1.id, vendor_id: vendors[8].id)
     create(:market_vendor, market_id: market1.id, vendor_id: vendors[9].id)
     create(:market_vendor, market_id: market2.id, vendor_id: vendors[10].id)
-
 
     get "/api/v0/markets/#{market1.id}/vendors"
 
@@ -64,12 +65,11 @@ describe 'api/v0/vendors/:id' do
   it 'sends a single vendor, happy' do
     market1 = create(:market)
     vendor1 = create(:vendor,
-    name: 'Urban Harvest',
-    description: 'Urban Harvest is a non-profit organization',
-    contact_name: 'Bob',
-    contact_phone: '303-555-5555',
-    credit_accepted: true
-    )
+                     name: 'Urban Harvest',
+                     description: 'Urban Harvest is a non-profit organization',
+                     contact_name: 'Bob',
+                     contact_phone: '303-555-5555',
+                     credit_accepted: true)
 
     create(:market_vendor, market_id: market1.id, vendor_id: vendor1.id)
 
@@ -87,5 +87,13 @@ describe 'api/v0/vendors/:id' do
     expect(vendor[:data][:attributes][:contact_name]).to eq('Bob')
     expect(vendor[:data][:attributes][:contact_phone]).to eq('303-555-5555')
     expect(vendor[:data][:attributes][:credit_accepted]).to eq(true)
+  end
+
+  it 'sad path' do
+    get '/api/v0/vendors/8454665744'
+
+    expect(response).to_not be_successful
+    expect(response.status).to eq(404)
+    expect(response.body).to eq("{\"errors\":[{\"detail\":\"Couldn't find Vendor with 'id'=8454665744\"}]}")
   end
 end
