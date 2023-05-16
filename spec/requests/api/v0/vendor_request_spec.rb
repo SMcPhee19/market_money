@@ -88,4 +88,12 @@ describe 'api/v0/vendors/:id' do
     expect(vendor[:data][:attributes][:contact_phone]).to eq('303-555-5555')
     expect(vendor[:data][:attributes][:credit_accepted]).to eq(true)
   end
+
+  it 'sad path' do
+    get '/api/v0/vendors/8454665744'
+
+    expect(response).to_not be_successful
+    expect(response.status).to eq(404)
+    expect(response.body).to eq("{\"errors\":[{\"detail\":\"Couldn't find Vendor with 'id'=8454665744\"}]}")
+  end
 end
