@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # spec/requests/api/v0/vendor_request_spec.rb
 require 'rails_helper'
 
@@ -19,7 +21,6 @@ describe '/api/v0/vendors' do
     create(:market_vendor, market_id: market1.id, vendor_id: vendors[8].id)
     create(:market_vendor, market_id: market1.id, vendor_id: vendors[9].id)
     create(:market_vendor, market_id: market2.id, vendor_id: vendors[10].id)
-
 
     get "/api/v0/markets/#{market1.id}/vendors"
 
@@ -64,12 +65,11 @@ describe 'api/v0/vendors/:id' do
   it 'sends a single vendor, happy' do
     market1 = create(:market)
     vendor1 = create(:vendor,
-    name: 'Urban Harvest',
-    description: 'Urban Harvest is a non-profit organization',
-    contact_name: 'Bob',
-    contact_phone: '303-555-5555',
-    credit_accepted: true
-    )
+                     name: 'Urban Harvest',
+                     description: 'Urban Harvest is a non-profit organization',
+                     contact_name: 'Bob',
+                     contact_phone: '303-555-5555',
+                     credit_accepted: true)
 
     create(:market_vendor, market_id: market1.id, vendor_id: vendor1.id)
 

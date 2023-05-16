@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # spec/requests/api/v0/market_request_spec.rb
 require 'rails_helper'
 
