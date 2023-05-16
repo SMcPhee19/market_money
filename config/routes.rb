@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   # root "articles#index"
   namespace :api do
     namespace :v0 do
+      resources :vendors, only: %i[show]
       resources :markets, only: %i[index show] do
         resources :vendors, only: %i[index]
       end
