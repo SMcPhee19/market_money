@@ -4,8 +4,9 @@ require 'rails_helper'
 describe '/api/v0/vendors' do
   it 'sends a list of all vendors, happy' do
     market1 = create(:market)
+    market2 = create(:market)
 
-    vendors = create_list(:vendor, 10)
+    vendors = create_list(:vendor, 11)
 
     create(:market_vendor, market_id: market1.id, vendor_id: vendors[0].id)
     create(:market_vendor, market_id: market1.id, vendor_id: vendors[1].id)
@@ -17,8 +18,10 @@ describe '/api/v0/vendors' do
     create(:market_vendor, market_id: market1.id, vendor_id: vendors[7].id)
     create(:market_vendor, market_id: market1.id, vendor_id: vendors[8].id)
     create(:market_vendor, market_id: market1.id, vendor_id: vendors[9].id)
+    create(:market_vendor, market_id: market2.id, vendor_id: vendors[10].id)
 
-    get '/api/v0/markets/:id/vendors'
+
+    get "/api/v0/markets/#{market1.id}/vendors"
 
     expect(response).to be_successful
 

@@ -1,5 +1,6 @@
 class Api::V0::VendorsController < ApplicationController
   def index
-    render(json: VendorSerializer.new(Vendor.all))
+    market = Market.find_by_id(params[:market_id])
+    render(json: VendorSerializer.new(market.vendors))
   end
 end
