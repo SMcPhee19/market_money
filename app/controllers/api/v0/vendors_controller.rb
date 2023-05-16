@@ -39,9 +39,18 @@ module Api
 
       def create
         vendor = Vendor.new(vendor_params)
-        return unless vendor.save
-
-        render(json: VendorSerializer.new(vendor), status: :created)
+        if vendor.save
+          render(json: VendorSerializer.new(Vendor.create(vendor_params)), status: 201)
+        else
+          render json: {
+            "errors": [
+              {
+                "detail": "Param is missing or the value is empty: vendor"
+              }
+            ]
+          },
+          status: 400
+        end
       end
 
       private
