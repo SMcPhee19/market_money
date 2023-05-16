@@ -63,36 +63,48 @@ describe '/api/v0/markets' do
     expect(markets[:data][1][:attributes][:vendor_count]).to eq(2)
   end
 
-  it 'sends a single market' do
-    market1 = create(:market,
-                     name: 'Union Station Farmers Market',
-                     street: '1701 Wynkoop St',
-                     city: 'Denver',
-                     county: 'Denver',
-                     state: 'Colorado',
-                     zip: '80202',
-                     lat: '39.752723',
-                     lon: '-104.998275')
-    vendors = create_list(:vendor, 1)
+  describe 'sends a single market' do
+    it 'happy path' do
+      market1 = create(:market,
+                      name: 'Union Station Farmers Market',
+                      street: '1701 Wynkoop St',
+                      city: 'Denver',
+                      county: 'Denver',
+                      state: 'Colorado',
+                      zip: '80202',
+                      lat: '39.752723',
+                      lon: '-104.998275')
+      vendors = create_list(:vendor, 1)
 
-    create(:market_vendor, market_id: market1.id, vendor_id: vendors[0].id)
+      create(:market_vendor, market_id: market1.id, vendor_id: vendors[0].id)
 
-    get "/api/v0/markets/#{market1.id}"
+      get "/api/v0/markets/#{market1.id}"
 
-    market = JSON.parse(response.body, symbolize_names: true)
+      market = JSON.parse(response.body, symbolize_names: true)
 
-    expect(market.count).to eq(1)
-    expect(market[:data][:id]).to eq(market1.id.to_s)
-    expect(market[:data][:type]).to eq('market')
-    expect(market[:data][:attributes][:name]).to eq('Union Station Farmers Market')
-    expect(market[:data][:attributes][:street]).to eq('1701 Wynkoop St')
-    expect(market[:data][:attributes][:city]).to eq('Denver')
-    expect(market[:data][:attributes][:county]).to eq('Denver')
-    expect(market[:data][:attributes][:county]).to eq('Denver')
-    expect(market[:data][:attributes][:state]).to eq('Colorado')
-    expect(market[:data][:attributes][:zip]).to eq('80202')
-    expect(market[:data][:attributes][:lat]).to eq('39.752723')
-    expect(market[:data][:attributes][:lon]).to eq('-104.998275')
-    expect(market[:data][:attributes][:vendor_count]).to eq(1)
+      expect(market.count).to eq(1)
+      expect(market[:data][:id]).to eq(market1.id.to_s)
+      expect(market[:data][:type]).to eq('market')
+      expect(market[:data][:attributes][:name]).to eq('Union Station Farmers Market')
+      expect(market[:data][:attributes][:street]).to eq('1701 Wynkoop St')
+      expect(market[:data][:attributes][:city]).to eq('Denver')
+      expect(market[:data][:attributes][:county]).to eq('Denver')
+      expect(market[:data][:attributes][:county]).to eq('Denver')
+      expect(market[:data][:attributes][:state]).to eq('Colorado')
+      expect(market[:data][:attributes][:zip]).to eq('80202')
+      expect(market[:data][:attributes][:lat]).to eq('39.752723')
+      expect(market[:data][:attributes][:lon]).to eq('-104.998275')
+      expect(market[:data][:attributes][:vendor_count]).to eq(1)
+    end
+
+    it 'sad path' do
+      get '/api/v0/markets/1223123123123123123'
+
+      market = JSON.parse(response.body, symbolize_names: true)
+      
+      expect(response).to_not be_successful
+      expect(response.status).to eq(404)
+      expect(market[:errors][0][:detail]).to eq("Couldn't find Market with 'id'=1223123123123123123")
+    end
   end
 end
