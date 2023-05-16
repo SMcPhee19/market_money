@@ -3,8 +3,8 @@
 # spec/requests/api/v0/vendor_request_spec.rb
 require 'rails_helper'
 
-describe '/api/v0/vendors' do
-  it 'sends a list of all vendors, happy' do
+describe 'Sends a list of all vendors' do
+  it 'happy path' do
     market1 = create(:market)
     market2 = create(:market)
 
@@ -61,8 +61,8 @@ describe '/api/v0/vendors' do
   end
 end
 
-describe 'api/v0/vendors/:id' do
-  it 'sends a single vendor, happy' do
+describe 'sends a single vendor' do
+  it 'happy path' do
     market1 = create(:market)
     vendor1 = create(:vendor,
                      name: 'Urban Harvest',
@@ -95,5 +95,47 @@ describe 'api/v0/vendors/:id' do
     expect(response).to_not be_successful
     expect(response.status).to eq(404)
     expect(response.body).to eq("{\"errors\":[{\"detail\":\"Couldn't find Vendor with 'id'=8454665744\"}]}")
+  end
+end
+
+describe 'Creates a new vendor' do
+  it 'happy path' do
+    valid_attributes = {
+        vendor: {
+          name: 'Kakariko Village Bazaar',
+          description: "It's dangerous to go alone! Take this.",
+          contact_name: 'Rhoam Bosphoramus Hyrule',
+          contact_phone: '322-498-4456',
+          credit_accepted: true
+        }
+      }
+
+    post '/api/v0/vendors', params: valid_attributes
+
+    expect(response).to be_successful
+    expect(response.status).to eq(201)
+
+    new_vendor = JSON.parse(response.body, symbolize_names: true)
+
+    expect(new_vendor.count).to eq(1)
+    expect(new_vendor[:data][:id]).to be_a(String)
+    expect(new_vendor[:data][:id]).to eq(Vendor.last.id.to_s)
+    expect(new_vendor[:data][:type]).to be_a(String)
+    expect(new_vendor[:data][:type]).to eq('vendor')
+    expect(new_vendor[:data][:attributes]).to have_key(:name)
+    expect(new_vendor[:data][:attributes][:name]).to be_a(String)
+    expect(new_vendor[:data][:attributes][:name]).to eq("Kakariko Village Bazaar")
+    expect(new_vendor[:data][:attributes]).to have_key(:description)
+    expect(new_vendor[:data][:attributes][:description]).to be_a(String)
+    expect(new_vendor[:data][:attributes][:description]).to eq("It's dangerous to go alone! Take this.")
+    expect(new_vendor[:data][:attributes]).to have_key(:contact_name)
+    expect(new_vendor[:data][:attributes][:contact_name]).to be_a(String)
+    expect(new_vendor[:data][:attributes][:contact_name]).to eq("Rhoam Bosphoramus Hyrule")
+    expect(new_vendor[:data][:attributes]).to have_key(:contact_phone)
+    expect(new_vendor[:data][:attributes][:contact_phone]).to be_a(String)
+    expect(new_vendor[:data][:attributes][:contact_phone]).to eq("322-498-4456")
+    expect(new_vendor[:data][:attributes]).to have_key(:credit_accepted)
+    expect(new_vendor[:data][:attributes][:credit_accepted]).to be_in([true, false])
+    expect(new_vendor[:data][:attributes][:credit_accepted]).to eq(true)
   end
 end
