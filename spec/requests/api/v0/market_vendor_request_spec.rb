@@ -43,4 +43,61 @@ describe 'creating a market vendor' do
     expect(market_vendors[:data][0][:attributes][:description]).to eq(vendor.description)
     expect(market_vendors[:data][0][:attributes][:description]).to_not eq(vendor2.description)
   end
+
+  it 'sad path: market does not exist' do
+    vendor1 = create(:vendor)
+
+    mv_params = ({"market_id": nil, "vendor_id": vendor1.id })
+
+    headers = { 'CONTENT_TYPE' => 'application/json' }
+
+    post '/api/v0/market_vendors', headers: headers, params: JSON.generate(market_vendor: mv_params)
+
+    expect(response).to_not be_successful
+    expect(response.status).to eq(404)
+
+    invalid = JSON.parse(response.body, symbolize_names: true)
+
+    expect(invalid).to have_key(:errors)
+    expect(invalid[:errors][0][:detail]).to eq("Validation failed: vendor or market doesn't exist")
+  end
+
+  it 'sad path: vendor does not exist' do
+    market1 = create(:market)
+
+    mv_params = ({"market_id": market1.id, "vendor_id": nil })
+
+    headers = { 'CONTENT_TYPE' => 'application/json' }
+
+    post '/api/v0/market_vendors', headers: headers, params: JSON.generate(market_vendor: mv_params)
+
+    expect(response).to_not be_successful
+    expect(response.status).to eq(404)
+
+    invalid = JSON.parse(response.body, symbolize_names: true)
+
+    expect(invalid).to have_key(:errors)
+    expect(invalid[:errors][0][:detail]).to eq("Validation failed: vendor or market doesn't exist")
+  end
+
+  it 'sad path: association already exists' do
+    market1 = create(:market)
+    vendor1 = create(:vendor)
+
+    create(:market_vendor, market_id: market1.id, vendor_id: vendor1.id)
+
+    mv_params = ({"market_id": market1.id, "vendor_id": vendor1.id })
+
+    headers = { 'CONTENT_TYPE' => 'application/json' }
+
+    post '/api/v0/market_vendors', headers: headers, params: JSON.generate(market_vendor: mv_params)
+
+    expect(response).to_not be_successful
+    expect(response.status).to eq(422)
+    
+    invalid = JSON.parse(response.body, symbolize_names: true)
+
+    expect(invalid).to have_key(:errors)
+    expect(invalid[:errors][0][:detail]).to eq("Validation failed: Market vendor asociation between market with market_id=#{market1.id} and vendor_id=#{vendor1.id} already exists")
+  end
 end
