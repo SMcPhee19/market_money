@@ -53,6 +53,31 @@ module Api
         end
       end
 
+      def update
+        vendor = Vendor.find_by_id(params[:id])
+        if vendor.nil?
+          render json: {
+                "errors": [
+                  {
+                    "detail": "Couldn't find Vendor with 'id'=#{params[:id]}"
+                  }
+                ]
+              },
+              status: 404
+        elsif vendor.update(vendor_params)
+          render(json: VendorSerializer.new(Vendor.update(vendor_params)), status: 200)
+        else
+          render json: {
+                "errors": [
+                  {
+                    "detail": 'Param is missing or the value is empty: vendor'
+                  }
+                ]
+              },
+              status: 400
+        end
+      end
+
       private
 
       def vendor_params

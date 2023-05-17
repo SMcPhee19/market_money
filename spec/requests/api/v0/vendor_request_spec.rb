@@ -154,4 +154,78 @@ describe 'Creates a new vendor' do
     expect(response.status).to eq(400)
     expect(vendor[:errors][0][:detail]).to eq('Param is missing or the value is empty: vendor')
   end
+
+  describe 'Udpate a vendor' do
+    it 'happy path' do
+      vendor1 = create(:vendor,
+        name: 'Kakario Village Bazaar',
+        description: "It's dangerous to go alone! Take this.",
+        contact_name: 'Rhoam Bosphoramus Hyrule',
+        contact_phone: '322-498-4456',
+        credit_accepted: true
+      )
+
+      update_params = {
+        vendor: {
+          name: 'Kakariko Village Bazaar',
+          description: "Shadow and light are two sides of the same coin... One cannot exist without the other.",
+          contact_name: 'Princess Midna',
+          contact_phone: '322-498-4456',
+          credit_accepted: true
+        }
+      }
+
+      headers = { 'CONTENT_TYPE' => 'application/json' }
+
+      patch "/api/v0/vendors/#{vendor1.id}", params: update_params
+
+      expect(response).to be_successful
+      expect(response.status).to eq(200)
+
+      updated_vendor = JSON.parse(response.body, symbolize_names: true)
+
+      expect(updated_vendor[:data][0][:attributes][:name]).to eq('Kakariko Village Bazaar')
+
+      expect(updated_vendor[:data][0][:attributes][:description]).to eq("Shadow and light are two sides of the same coin... One cannot exist without the other.")
+      expect(updated_vendor[:data][0][:attributes][:description]).to_not eq("It's dangerous to go alone! Take this.")
+      
+      expect(updated_vendor[:data][0][:attributes][:contact_name]).to eq("Princess Midna")
+      expect(updated_vendor[:data][0][:attributes][:contact_name]).to_not eq("Rhoam Bosphoramus Hyrule")
+
+      expect(updated_vendor[:data][0][:attributes][:contact_phone]).to eq("322-498-4456")
+      expect(updated_vendor[:data][0][:attributes][:credit_accepted]).to eq(true)
+    end
+
+    it 'sad path: invalid id' do
+      get '/api/v0/vendors/8454665744'
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(404)
+      expect(response.body).to eq("{\"errors\":[{\"detail\":\"Couldn't find Vendor with 'id'=8454665744\"}]}")
+    end
+
+    it 'sad path: invalid params' do
+      vendor1 = create(:vendor,
+        name: 'Kakario Village Bazaar',
+        description: "It's dangerous to go alone! Take this.",
+        contact_name: 'Rhoam Bosphoramus Hyrule',
+        contact_phone: '322-498-4456',
+        credit_accepted: true
+      )
+
+      update_params = {
+        vendor: {
+          contact_name: nil
+        }
+      }
+
+      patch "/api/v0/vendors/#{vendor1.id}", params: update_params
+
+      vendor = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(400)
+      expect(vendor[:errors][0][:detail]).to eq('Param is missing or the value is empty: vendor')
+    end
+  end
 end
