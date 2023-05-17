@@ -3,9 +3,9 @@ module Api
     class MarketVendorsController < ApplicationController
       def create
         market_vendor = MarketVendor.new(market_vendor_params)
-        if market_vendor.save
-          render json: MarketVendorSerializer.new(MarketVendor.create(market_vendor_params)), status: 201
-        end
+        return unless market_vendor.save
+
+        render json: MarketVendorSerializer.new(MarketVendor.create(market_vendor_params)), status: 201
       end
 
       private
