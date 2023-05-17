@@ -152,7 +152,7 @@ describe 'Creates a new vendor' do
 
     expect(response).to_not be_successful
     expect(response.status).to eq(400)
-    expect(response.body).to eq("{\"errors\":[{\"detail\":\"Param is missing or the value is empty: vendor\"}]}")
+    expect(response.body).to eq('{"errors":[{"detail":"Param is missing or the value is empty: vendor"}]}')
   end
 
   describe 'Udpate a vendor' do
@@ -223,7 +223,7 @@ describe 'Creates a new vendor' do
 
       expect(response).to_not be_successful
       expect(response.status).to eq(400)
-      expect(response.body).to eq("{\"errors\":[{\"detail\":\"Param is missing or the value is empty: vendor\"}]}")
+      expect(response.body).to eq('{"errors":[{"detail":"Param is missing or the value is empty: vendor"}]}')
     end
   end
 
