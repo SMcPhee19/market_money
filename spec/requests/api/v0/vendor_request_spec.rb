@@ -57,7 +57,7 @@ describe 'Sends a list of all vendors' do
 
     expect(response).to_not be_successful
     expect(response.status).to eq(404)
-    expect(market[:errors][0][:detail]).to eq("Couldn't find Market with 'id'=1223123123123123123")
+    expect(response.body).to eq("{\"errors\":[{\"detail\":\"Couldn't find Market with 'id'=1223123123123123123\"}]}")
   end
 end
 
@@ -152,7 +152,7 @@ describe 'Creates a new vendor' do
 
     expect(response).to_not be_successful
     expect(response.status).to eq(400)
-    expect(vendor[:errors][0][:detail]).to eq('Param is missing or the value is empty: vendor')
+    expect(response.body).to eq("{\"errors\":[{\"detail\":\"Param is missing or the value is empty: vendor\"}]}")
   end
 
   describe 'Udpate a vendor' do
@@ -223,7 +223,7 @@ describe 'Creates a new vendor' do
 
       expect(response).to_not be_successful
       expect(response.status).to eq(400)
-      expect(vendor[:errors][0][:detail]).to eq('Param is missing or the value is empty: vendor')
+      expect(response.body).to eq("{\"errors\":[{\"detail\":\"Param is missing or the value is empty: vendor\"}]}")
     end
   end
 
