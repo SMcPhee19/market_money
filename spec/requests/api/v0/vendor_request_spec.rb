@@ -226,4 +226,18 @@ describe 'Creates a new vendor' do
       expect(vendor[:errors][0][:detail]).to eq('Param is missing or the value is empty: vendor')
     end
   end
+
+  describe 'Delete a vendor' do
+    it 'happy path' do
+      vendor1 = create(:vendor)
+
+      delete "/api/v0/vendors/#{vendor1.id}"
+
+      expect(response).to be_successful
+      expect(response.status).to eq(204)
+
+      expect(Vendor.count).to eq(0)
+      expect { Vendor.find(vendor1.id) }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
 end
