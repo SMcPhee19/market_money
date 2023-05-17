@@ -82,13 +82,13 @@ module Api
         vendor = Vendor.find_by_id(params[:id])
         if vendor.nil?
           render json: {
-            "errors": [
-              {
-                "detail": "Couldn't find Vendor with 'id'=#{params[:id]}"
-              }
-            ]
-          },
-          status: 404
+                   "errors": [
+                     {
+                       "detail": "Couldn't find Vendor with 'id'=#{params[:id]}"
+                     }
+                   ]
+                 },
+                 status: 404
         else
           vendor.destroy
         end

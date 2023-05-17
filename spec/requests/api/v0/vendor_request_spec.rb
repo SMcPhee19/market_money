@@ -237,7 +237,7 @@ describe 'Creates a new vendor' do
       expect(response.status).to eq(204)
 
       expect(Vendor.count).to eq(0)
-      expect{ Vendor.find(vendor1.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { Vendor.find(vendor1.id) }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 end
