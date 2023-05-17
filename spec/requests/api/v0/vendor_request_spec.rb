@@ -57,7 +57,7 @@ describe 'Sends a list of all vendors' do
 
     expect(response).to_not be_successful
     expect(response.status).to eq(404)
-    expect(market[:errors][0][:detail]).to eq("Couldn't find Market with 'id'=1223123123123123123")
+    expect(response.body).to eq("{\"errors\":[{\"detail\":\"Couldn't find Market with 'id'=1223123123123123123\"}]}")
   end
 end
 
@@ -152,7 +152,7 @@ describe 'Creates a new vendor' do
 
     expect(response).to_not be_successful
     expect(response.status).to eq(400)
-    expect(vendor[:errors][0][:detail]).to eq('Param is missing or the value is empty: vendor')
+    expect(response.body).to eq("{\"errors\":[{\"detail\":\"Param is missing or the value is empty: vendor\"}]}")
   end
 
   describe 'Udpate a vendor' do
@@ -223,7 +223,7 @@ describe 'Creates a new vendor' do
 
       expect(response).to_not be_successful
       expect(response.status).to eq(400)
-      expect(vendor[:errors][0][:detail]).to eq('Param is missing or the value is empty: vendor')
+      expect(response.body).to eq("{\"errors\":[{\"detail\":\"Param is missing or the value is empty: vendor\"}]}")
     end
   end
 
@@ -238,6 +238,14 @@ describe 'Creates a new vendor' do
 
       expect(Vendor.count).to eq(0)
       expect { Vendor.find(vendor1.id) }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it 'sad path: invalid id' do
+      delete '/api/v0/vendors/7089587281'
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(404)
+      expect(response.body).to eq("{\"errors\":[{\"detail\":\"Couldn't find Vendor with 'id'=7089587281\"}]}")
     end
   end
 end
