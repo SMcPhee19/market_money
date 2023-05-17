@@ -158,17 +158,16 @@ describe 'Creates a new vendor' do
   describe 'Udpate a vendor' do
     it 'happy path' do
       vendor1 = create(:vendor,
-        name: 'Kakario Village Bazaar',
-        description: "It's dangerous to go alone! Take this.",
-        contact_name: 'Rhoam Bosphoramus Hyrule',
-        contact_phone: '322-498-4456',
-        credit_accepted: true
-      )
+                       name: 'Kakario Village Bazaar',
+                       description: "It's dangerous to go alone! Take this.",
+                       contact_name: 'Rhoam Bosphoramus Hyrule',
+                       contact_phone: '322-498-4456',
+                       credit_accepted: true)
 
       update_params = {
         vendor: {
           name: 'Kakariko Village Bazaar',
-          description: "Shadow and light are two sides of the same coin... One cannot exist without the other.",
+          description: 'Shadow and light are two sides of the same coin... One cannot exist without the other.',
           contact_name: 'Princess Midna',
           contact_phone: '322-498-4456',
           credit_accepted: true
@@ -186,13 +185,13 @@ describe 'Creates a new vendor' do
 
       expect(updated_vendor[:data][0][:attributes][:name]).to eq('Kakariko Village Bazaar')
 
-      expect(updated_vendor[:data][0][:attributes][:description]).to eq("Shadow and light are two sides of the same coin... One cannot exist without the other.")
+      expect(updated_vendor[:data][0][:attributes][:description]).to eq('Shadow and light are two sides of the same coin... One cannot exist without the other.')
       expect(updated_vendor[:data][0][:attributes][:description]).to_not eq("It's dangerous to go alone! Take this.")
-      
-      expect(updated_vendor[:data][0][:attributes][:contact_name]).to eq("Princess Midna")
-      expect(updated_vendor[:data][0][:attributes][:contact_name]).to_not eq("Rhoam Bosphoramus Hyrule")
 
-      expect(updated_vendor[:data][0][:attributes][:contact_phone]).to eq("322-498-4456")
+      expect(updated_vendor[:data][0][:attributes][:contact_name]).to eq('Princess Midna')
+      expect(updated_vendor[:data][0][:attributes][:contact_name]).to_not eq('Rhoam Bosphoramus Hyrule')
+
+      expect(updated_vendor[:data][0][:attributes][:contact_phone]).to eq('322-498-4456')
       expect(updated_vendor[:data][0][:attributes][:credit_accepted]).to eq(true)
     end
 
@@ -206,12 +205,11 @@ describe 'Creates a new vendor' do
 
     it 'sad path: invalid params' do
       vendor1 = create(:vendor,
-        name: 'Kakario Village Bazaar',
-        description: "It's dangerous to go alone! Take this.",
-        contact_name: 'Rhoam Bosphoramus Hyrule',
-        contact_phone: '322-498-4456',
-        credit_accepted: true
-      )
+                       name: 'Kakario Village Bazaar',
+                       description: "It's dangerous to go alone! Take this.",
+                       contact_name: 'Rhoam Bosphoramus Hyrule',
+                       contact_phone: '322-498-4456',
+                       credit_accepted: true)
 
       update_params = {
         vendor: {
