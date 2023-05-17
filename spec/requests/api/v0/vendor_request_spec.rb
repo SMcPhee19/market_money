@@ -239,5 +239,13 @@ describe 'Creates a new vendor' do
       expect(Vendor.count).to eq(0)
       expect { Vendor.find(vendor1.id) }.to raise_error(ActiveRecord::RecordNotFound)
     end
+
+    it 'sad path: invalid id' do
+      delete '/api/v0/vendors/7089587281'
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(404)
+      expect(response.body).to eq("{\"errors\":[{\"detail\":\"Couldn't find Vendor with 'id'=7089587281\"}]}")
+    end
   end
 end
