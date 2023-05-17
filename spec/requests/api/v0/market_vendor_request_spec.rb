@@ -3,9 +3,9 @@ require 'rails_helper'
 
 describe 'creating a market vendor' do
   it 'happy path' do
-    market = create(:market)
+    market = create(:market, name: 'Union Station Farmers Market')
     market2 = create(:market)
-    vendor = create(:vendor)
+    vendor = create(:vendor, name: 'Acme Farms')
     vendor2 = create(:vendor)
 
     market_vendor_params = { market_id: market.id, vendor_id: vendor.id }
@@ -31,5 +31,16 @@ describe 'creating a market vendor' do
     expect(new_mv[:data][:relationships][:vendor][:data]).to have_key(:id)
     expect(new_mv[:data][:relationships][:vendor][:data][:id]).to eq(vendor.id.to_s)
     expect(new_mv[:data][:relationships][:vendor][:data][:id]).to_not eq(vendor2.id.to_s)
+
+    get "/api/v0/markets/#{market.id}/vendors"
+
+    market_vendors = JSON.parse(response.body, symbolize_names: true)
+
+    expect(market_vendors[:data].count).to eq(1)
+    expect(market_vendors[:data][0]).to have_key(:attributes)
+    expect(market_vendors[:data][0][:attributes][:name]).to eq(vendor.name)
+    expect(market_vendors[:data][0][:attributes][:name]).to_not eq(vendor2.name)
+    expect(market_vendors[:data][0][:attributes][:description]).to eq(vendor.description)
+    expect(market_vendors[:data][0][:attributes][:description]).to_not eq(vendor2.description)
   end
 end
