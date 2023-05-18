@@ -109,4 +109,49 @@ describe '/api/v0/markets' do
       expect(market[:errors][0][:detail]).to eq("Couldn't find Market with 'id'=1223123123123123123")
     end
   end
+
+  describe 'atms: happy paths' do
+    it 'returns atms close to market' do
+      VCR.use_cassette('can_create_a_connection_and_get_atms') do
+        market1 = create(:market, lat: '39.752723', lon: '-104.998275')
+
+        get "/api/v0/markets/#{market1.id}/nearest_atms"
+
+        expect(response).to be_successful
+        expect(response.status).to eq(200)
+
+        atms = JSON.parse(response.body, symbolize_names: true)
+
+        expect(atms[:data]).to be_an(Array)
+        expect(atms[:data].count).to eq(10)
+        expect(atms[:data][0]).to have_key(:type)
+        expect(atms[:data][0][:type]).to eq('atm')
+        expect(atms[:data][0]).to have_key(:attributes)
+        expect(atms[:data][0][:attributes]).to be_a(Hash)
+        expect(atms[:data][0][:attributes]).to have_key(:name)
+        expect(atms[:data][0][:attributes][:name]).to be_a(String)
+        expect(atms[:data][0][:attributes]).to have_key(:address)
+        expect(atms[:data][0][:attributes][:address]).to be_a(String)
+        expect(atms[:data][0][:attributes]).to have_key(:lat)
+        expect(atms[:data][0][:attributes][:lat]).to be_a(Float)
+        expect(atms[:data][0][:attributes]).to have_key(:lon)
+        expect(atms[:data][0][:attributes][:lon]).to be_a(Float)
+        expect(atms[:data][0][:attributes]).to have_key(:distance)
+        expect(atms[:data][0][:attributes][:distance]).to be_a(Float)
+      end
+    end
+
+    it 'sad path: invalid market id' do
+      VCR.use_cassette('can_create_a_connection_and_get_atms') do
+        get "/api/v0/markets/120606/nearest_atms"
+
+        expect(response).to_not be_successful
+        expect(response.status).to eq(404)
+
+        invalid = JSON.parse(response.body, symbolize_names: true)
+
+        expect(invalid[:errors][0][:detail]).to eq("Couldn't find Market with 'id'=120606")
+      end
+    end
+  end
 end
