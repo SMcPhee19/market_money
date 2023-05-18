@@ -18,7 +18,7 @@ class TomTomFacade
   end
 
   def atm_data
-    @atm_data ||= service.get_atms(@location.latitude, @location.longitude)
+    @atm_data ||= service.get_atms(@location.lat, @location.lon)
   end
 
   def create_atm(atms)
