@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       resources :vendors, only: %i[show new create update destroy]
       resources :market_vendors, only: %i[create]
       delete 'market_vendors', to: 'market_vendors#destroy'
+      get 'markets/search', to: 'markets_search#index'
       resources :markets, only: %i[index show] do
         resources :vendors, only: %i[index]
       end
