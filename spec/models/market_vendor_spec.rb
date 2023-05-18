@@ -34,5 +34,3 @@ RSpec.describe MarketVendor, type: :model do
     end
   end
 end
-
-

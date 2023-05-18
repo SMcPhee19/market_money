@@ -21,7 +21,8 @@ module Api
         market = Market.find_by_id(params[:market_vendor][:market_id])
         market_vendor = MarketVendor.find_market_vendor(market, vendor)
         if vendor.nil? || market.nil?
-          render json: { "errors": [{ "detail": "No MarketVendor with market_id=#{params[:market_vendor][:market_id]} and vendor_id=#{params[:market_vendor][:vendor_id]} exists" }] }, status: 404
+          render json: { "errors": [{ "detail": "No MarketVendor with market_id=#{params[:market_vendor][:market_id]} and vendor_id=#{params[:market_vendor][:vendor_id]} exists" }] },
+                 status: 404
         else
           market_vendor.destroy
         end
