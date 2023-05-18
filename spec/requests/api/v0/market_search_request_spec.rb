@@ -139,7 +139,7 @@ RSpec.describe 'Market Search' do
       get '/api/v0/markets/search', params: query_params
       expect(response).to_not be_successful
       expect(response.status).to eq(422)
-      
+
       invalid = JSON.parse(response.body, symbolize_names: true)
 
       expect(invalid).to have_key(:errors)
@@ -158,7 +158,7 @@ RSpec.describe 'Market Search' do
       get '/api/v0/markets/search', params: query_params
       expect(response).to_not be_successful
       expect(response.status).to eq(422)
-      
+
       invalid = JSON.parse(response.body, symbolize_names: true)
 
       expect(invalid).to have_key(:errors)

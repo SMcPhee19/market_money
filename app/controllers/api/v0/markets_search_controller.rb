@@ -9,9 +9,9 @@ class Api::V0::MarketsSearchController < ApplicationController
   private
 
   def valid_params
-    if only_city? || just_city_and_name?
-      invalid_response
-    end
+    return unless only_city? || just_city_and_name?
+
+    invalid_response
   end
 
   def only_city?
@@ -23,6 +23,7 @@ class Api::V0::MarketsSearchController < ApplicationController
   end
 
   def invalid_response
-    render json: { "errors": [{ "detail": 'Invalid set of parameters. Please provide a valid set of parameters to perform a search with this endpoint.' }] }, status: 422
+    render json: { "errors": [{ "detail": 'Invalid set of parameters. Please provide a valid set of parameters to perform a search with this endpoint.' }] },
+           status: 422
   end
 end
