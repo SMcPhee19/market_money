@@ -101,3 +101,65 @@ describe 'creating a market vendor' do
     expect(invalid[:errors][0][:detail]).to eq("Validation failed: Market vendor asociation between market with market_id=#{market1.id} and vendor_id=#{vendor1.id} already exists")
   end
 end
+
+describe 'deleting a market vendor' do
+  it 'happy path' do
+    market1 = create(:market)
+    vendor1 = create(:vendor)
+    vendor2 = create(:vendor)
+
+    market_vendor1 = create(:market_vendor, market_id: market1.id, vendor_id: vendor1.id)
+    market_vendor2 = create(:market_vendor, market_id: market1.id, vendor_id: vendor2.id)
+
+    mv_params = { "market_id": market1.id, "vendor_id": vendor1.id }
+
+    headers = { 'CONTENT_TYPE' => 'application/json' }
+
+    delete '/api/v0/market_vendors', headers:, params: JSON.generate(market_vendor: mv_params)
+
+    expect(response).to be_successful
+    expect(response.status).to eq(204)
+
+    get "/api/v0/markets/#{market1.id}/vendors"
+
+    current_market_vendors = JSON.parse(response.body, symbolize_names: true)
+
+    expect(current_market_vendors[:data].count).to eq(1)
+    expect(current_market_vendors[:data].count).to_not eq(2)
+    expect(current_market_vendors[:data][0][:attributes][:name]).to eq(vendor2.name)
+  end
+
+  it 'sad path: market does not exist' do
+    vendor = create(:vendor)
+    mv_params = { "market_id": nil, "vendor_id": vendor.id }
+
+    headers = { 'CONTENT_TYPE' => 'application/json' }
+
+    delete '/api/v0/market_vendors', headers:, params: JSON.generate(market_vendor: mv_params)
+
+    expect(response).to_not be_successful
+    expect(response.status).to eq(404)
+
+    invalid = JSON.parse(response.body, symbolize_names: true)
+
+    expect(invalid).to have_key(:errors)
+    expect(invalid[:errors][0][:detail]).to eq("No MarketVendor with market_id= and vendor_id=#{vendor.id} exists")
+  end
+
+  it 'sad path: vendor does not exist' do
+    market = create(:market)
+    mv_params = { "market_id": market.id, "vendor_id": nil }
+
+    headers = { 'CONTENT_TYPE' => 'application/json' }
+
+    delete '/api/v0/market_vendors', headers:, params: JSON.generate(market_vendor: mv_params)
+
+    expect(response).to_not be_successful
+    expect(response.status).to eq(404)
+
+    invalid = JSON.parse(response.body, symbolize_names: true)
+
+    expect(invalid).to have_key(:errors)
+    expect(invalid[:errors][0][:detail]).to eq("No MarketVendor with market_id=#{market.id} and vendor_id= exists")
+  end
+end
