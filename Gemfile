@@ -5,6 +5,9 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '3.1.1'
 
+gem 'faraday'
+gem 'figaro'
+
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem 'rails', '~> 7.0.4', '>= 7.0.4.3'
 
@@ -50,6 +53,7 @@ end
 group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+  gem 'rubocop-rails'
 end
 
 group :test do
@@ -57,4 +61,9 @@ group :test do
   gem 'rspec-rails'
   gem 'shoulda-matchers'
   gem 'simplecov'
+  gem 'capybara'
+  gem 'launchy'
+  gem 'orderly'
+  gem 'vcr'
+  gem 'webmock'
 end
