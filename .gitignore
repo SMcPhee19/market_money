@@ -29,4 +29,8 @@
 /config/master.key
 
 /coverage
+/spec/fixtures
 
+
+# Ignore application configuration
+/config/application.yml
