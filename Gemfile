@@ -57,13 +57,13 @@ group :development do
 end
 
 group :test do
+  gem 'capybara'
+  gem 'launchy'
+  gem 'orderly'
   gem 'pry'
   gem 'rspec-rails'
   gem 'shoulda-matchers'
   gem 'simplecov'
-  gem 'capybara'
-  gem 'launchy'
-  gem 'orderly'
   gem 'vcr'
   gem 'webmock'
 end

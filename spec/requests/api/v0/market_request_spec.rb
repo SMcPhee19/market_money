@@ -143,7 +143,7 @@ describe '/api/v0/markets' do
 
     it 'sad path: invalid market id' do
       VCR.use_cassette('can_create_a_connection_and_get_atms') do
-        get "/api/v0/markets/120606/nearest_atms"
+        get '/api/v0/markets/120606/nearest_atms'
 
         expect(response).to_not be_successful
         expect(response.status).to eq(404)
